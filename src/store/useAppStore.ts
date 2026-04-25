@@ -144,6 +144,7 @@ interface AppActions {
   setSelectedCategory: (category: string) => void;
   setLanguage: (language: 'zh' | 'en') => void;
   setSidebarCollapsed: (collapsed: boolean) => void;
+  setReadmeModalOpen: (open: boolean) => void;
   
   // Update actions
   setUpdateNotification: (notification: UpdateNotification | null) => void;
@@ -278,6 +279,8 @@ const normalizePersistedState = (
   return {
     ...currentState,
     ...safePersisted,
+    // Force dark theme: migrate legacy 'light' users to the new Linear dark-mode-first design
+    theme: 'dark',
     repositories,
     releases,
     searchResults: repositories,
@@ -637,7 +640,7 @@ export const useAppStore = create<AppState & AppActions>()(
       categoryOrder: [],
       collapsedSidebarCategoryCount: 20,
       assetFilters: defaultPresetFilters,
-      theme: 'light',
+      theme: 'dark',
       currentView: 'repositories',
       selectedCategory: 'all',
       language: 'zh',
@@ -645,6 +648,7 @@ export const useAppStore = create<AppState & AppActions>()(
       analysisProgress: { current: 0, total: 0 },
       backendApiSecret: readSessionBackendSecret(),
       isSidebarCollapsed: false,
+      readmeModalOpen: false,
       releaseViewMode: 'timeline',
       releaseSelectedFilters: [],
       releaseSearchQuery: '',
@@ -1143,6 +1147,7 @@ export const useAppStore = create<AppState & AppActions>()(
       setSelectedCategory: (selectedCategory) => set({ selectedCategory }),
       setLanguage: (language) => set({ language }),
       setSidebarCollapsed: (isSidebarCollapsed) => set({ isSidebarCollapsed }),
+      setReadmeModalOpen: (readmeModalOpen) => set({ readmeModalOpen }),
       
       // Update actions
       setUpdateNotification: (notification) => set({ updateNotification: notification }),
